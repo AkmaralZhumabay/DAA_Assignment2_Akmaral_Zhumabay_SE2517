@@ -1,0 +1,9 @@
+method,n,time_ms,comparisons
+Repeated insert,100,0.0023,206
+Floyd buildHeap,100,0.0049,177
+Repeated insert,1000,0.0279,2326
+Floyd buildHeap,1000,0.0509,1900
+Repeated insert,10000,0.2871,22753
+Floyd buildHeap,10000,0.5073,18772
+Repeated insert,100000,1.4293,227857
+Floyd buildHeap,100000,0.8402,187911

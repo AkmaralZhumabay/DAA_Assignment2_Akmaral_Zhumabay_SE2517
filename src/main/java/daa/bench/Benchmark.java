@@ -35,6 +35,7 @@ public class Benchmark {
             runW4(n, data);
         }
 
+        runBuildHeapBonus();
         CsvWriter.write("results/results.csv", results);
         System.out.println("Benchmark complete.");
         System.out.println("Results saved to results/results.csv");
@@ -357,5 +358,89 @@ public class Benchmark {
         double[] copy = values.clone();
         Arrays.sort(copy);
         return copy[copy.length / 2];
+    }
+
+    private void runBuildHeapBonus() throws IOException {
+        List<String> lines = new ArrayList<>();
+        lines.add("method,n,time_ms,comparisons");
+
+        for (int n : SIZES) {
+            int[] data = generateData(n);
+
+            // Warm-up repeated insert
+            MinHeap warmupInsert = new MinHeap(Math.max(1, n));
+            for (int value : data) {
+                warmupInsert.insert(value);
+            }
+
+            // Warm-up Floyd buildHeap
+            MinHeap warmupBuild = new MinHeap(Math.max(1, n));
+            warmupBuild.buildHeap(data);
+
+            double[] insertTimes = new double[RUNS];
+            double[] buildTimes = new double[RUNS];
+
+            long insertComparisons = 0;
+            long buildComparisons = 0;
+
+            for (int run = 0; run < RUNS; run++) {
+                MinHeap insertHeap = new MinHeap(Math.max(1, n));
+                insertHeap.resetMetrics();
+
+                long startInsert = System.nanoTime();
+
+                for (int value : data) {
+                    insertHeap.insert(value);
+                }
+
+                long endInsert = System.nanoTime();
+
+                insertTimes[run] =
+                        (endInsert - startInsert) / 1_000_000.0;
+
+                if (run == 0) {
+                    insertComparisons =
+                            insertHeap.getMetrics().getComparisons();
+                }
+
+                MinHeap buildHeap = new MinHeap(Math.max(1, n));
+                buildHeap.resetMetrics();
+
+                long startBuild = System.nanoTime();
+
+                buildHeap.buildHeap(data);
+
+                long endBuild = System.nanoTime();
+
+                buildTimes[run] =
+                        (endBuild - startBuild) / 1_000_000.0;
+
+                if (run == 0) {
+                    buildComparisons =
+                            buildHeap.getMetrics().getComparisons();
+                }
+            }
+
+            lines.add(
+                    "Repeated insert," + n + "," +
+                            median(insertTimes) + "," +
+                            insertComparisons
+            );
+
+            lines.add(
+                    "Floyd buildHeap," + n + "," +
+                            median(buildTimes) + "," +
+                            buildComparisons
+            );
+        }
+
+        java.nio.file.Files.write(
+                java.nio.file.Path.of("results/buildheap_results.csv"),
+                lines
+        );
+
+        System.out.println(
+                "Bonus results saved to results/buildheap_results.csv"
+        );
     }
 }

@@ -136,6 +136,16 @@ DynamicArray is especially efficient for random access because an element can be
 
 ---
 
+## Bonus — Floyd's O(n) buildHeap
+
+An additional `buildHeap(int[] array)` operation was implemented using Floyd's bottom-up heap construction algorithm. Instead of inserting every element separately, the input values are first copied into the heap array. Bubble-down is then performed from the last non-leaf node (`n / 2 - 1`) back to the root.
+
+Repeated insertion builds a heap using n individual `insert` operations, each of which may require bubble-up and has a worst-case cost of O(log n). Therefore, the conventional repeated-insertion approach has an O(n log n) upper bound. Floyd's algorithm constructs the heap in O(n) time because most nodes are near the leaves and can move only a small distance during bubble-down.
+
+![Floyd buildHeap comparison](results/plots/buildheap_comparison.png)
+
+The measured results compare median construction time and element-comparison count for the same input generated with `Random(42)`. Floyd's bottom-up construction generally requires fewer comparisons and less work than building the heap through repeated insertion, especially as n increases.
+
 ## 7. Conclusion
 
 The three custom data structures demonstrate different performance trade-offs. DynamicArray provides fast indexed access and strong cache locality, MyLinkedList provides efficient boundary updates without array shifting, and MinHeap provides efficient priority-based processing. The measured operation counts and running times are consistent with the expected behavior of these structures and demonstrate why structures with similar asymptotic bounds can still have substantially different practical performance.

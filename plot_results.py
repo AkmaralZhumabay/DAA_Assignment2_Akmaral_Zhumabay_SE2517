@@ -129,3 +129,49 @@ plot_workload("W3", "w3_insert_remove.png")
 plot_workload("W4", "w4_priority_processing.png")
 
 print("All plots generated.")
+
+bonus = pd.read_csv("results/buildheap_results.csv")
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+for method, group in bonus.groupby("method"):
+    group = group.sort_values("n")
+
+    axes[0].plot(
+        group["n"],
+        group["time_ms"],
+        marker="o",
+        label=method
+    )
+
+    axes[1].plot(
+        group["n"],
+        group["comparisons"],
+        marker="o",
+        label=method
+    )
+
+setup_x_axis(axes[0])
+axes[0].set_yscale("log")
+axes[0].set_ylabel("Time (ms)")
+axes[0].set_title("Build Time vs n")
+axes[0].legend()
+
+setup_x_axis(axes[1])
+axes[1].set_yscale("log")
+axes[1].set_ylabel("Comparisons")
+axes[1].set_title("Comparisons vs n")
+axes[1].legend()
+
+fig.suptitle("Bonus - Floyd buildHeap vs Repeated Insert", fontsize=16)
+fig.tight_layout(rect=[0, 0, 1, 0.94])
+
+plt.savefig(
+    "results/plots/buildheap_comparison.png",
+    dpi=200,
+    bbox_inches="tight"
+)
+
+plt.close()
+
+print("Saved results/plots/buildheap_comparison.png")
