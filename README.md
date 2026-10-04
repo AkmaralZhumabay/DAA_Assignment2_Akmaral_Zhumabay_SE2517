@@ -3,7 +3,7 @@
 **Student:** Akmaral Zhumabay  
 **Group:** SE-2517  
 **Course:** Design and Analysis of Algorithms  
-**Instructor:** Taubakabyl Nurlybek
+**GitHub Repository:** https://github.com/AkmaralZhumabay/DAA_Assignment2_Akmaral_Zhumabay_SE2517
 
 ## Overview
 
