@@ -120,4 +120,39 @@ class MinHeapTest {
             previous = current;
         }
     }
+
+    @Test
+    void buildHeapCreatesValidHeap() {
+        MinHeap heap = new MinHeap();
+
+        int[] data = {9, 4, 7, 1, 3, 6, 2, 8, 5};
+
+        heap.buildHeap(data);
+
+        assertEquals(data.length, heap.size());
+        assertTrue(heap.isValidHeap());
+        assertEquals(1, heap.peekMin());
+    }
+
+    @Test
+    void buildHeapProducesSortedExtraction() {
+        MinHeap heap = new MinHeap();
+        Random random = new Random(42);
+
+        int[] data = new int[1000];
+
+        for (int i = 0; i < data.length; i++) {
+            data[i] = random.nextInt();
+        }
+
+        heap.buildHeap(data);
+
+        int previous = heap.extractMin();
+
+        while (!heap.isEmpty()) {
+            int current = heap.extractMin();
+            assertTrue(previous <= current);
+            previous = current;
+        }
+    }
 }

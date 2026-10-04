@@ -155,6 +155,26 @@ public class MinHeap {
         }
     }
 
+    public void buildHeap(int[] array) {
+        if (array == null) {
+            throw new IllegalArgumentException("Array cannot be null");
+        }
+
+        int capacity = Math.max(DEFAULT_CAPACITY, array.length);
+        heap = new int[capacity];
+        size = array.length;
+
+        for (int i = 0; i < size; i++) {
+            heap[i] = array[i];
+            metrics.step();
+            metrics.move();
+        }
+
+        for (int i = size / 2 - 1; i >= 0; i--) {
+            bubbleDown(i);
+        }
+    }
+
     private void ensureCapacity() {
         if (size < heap.length) {
             return;
