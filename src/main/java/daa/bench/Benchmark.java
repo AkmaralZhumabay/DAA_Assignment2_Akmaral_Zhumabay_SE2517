@@ -266,7 +266,12 @@ public class Benchmark {
     private void runW4(int n, int[] data) {
 
         for (int warmup = 0; warmup < WARMUP_RUNS; warmup++) {
-            MinHeap heap = createHeap(data);
+            MinHeap heap = new MinHeap(Math.max(1, n));
+
+            for (int value : data) {
+                heap.insert(value);
+            }
+
             extractAndCheck(heap);
         }
 
@@ -338,16 +343,6 @@ public class Benchmark {
         }
 
         return list;
-    }
-
-    private MinHeap createHeap(int[] data) {
-        MinHeap heap = new MinHeap(Math.max(1, data.length));
-
-        for (int value : data) {
-            heap.insert(value);
-        }
-
-        return heap;
     }
 
     private Metrics getMetrics(IntList list) {
